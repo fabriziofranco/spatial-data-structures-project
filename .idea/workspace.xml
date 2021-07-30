@@ -15,9 +15,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13ed4f84-a26b-4371-8b15-d45be95806be" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/structures/neighborhood.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/structures/neighborhood.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/structures/point.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/structures/point.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/structures/point.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/structures/point.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +28,6 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -40,7 +40,7 @@
     </file-type-list>
   </component>
   <component name="ProjectId" id="1vyYXQNc12zesDXBz2566uK0XZ7" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -61,20 +61,20 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="spatial_data_structures_project" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="spatial_data_structures_project" TARGET_NAME="spatial_data_structures_project" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="spatial_data_structures_project" RUN_TARGET_NAME="spatial_data_structures_project">
+    <configuration name="spatial_data_structures_project" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" RUN_PATH="$PROJECT_DIR$/CMakeLists.txt" EXPLICIT_BUILD_TARGET_NAME="all">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
   </component>
@@ -88,6 +88,8 @@
       <updated>1627535835092</updated>
       <workItem from="1627535837057" duration="3150000" />
       <workItem from="1627601105672" duration="6115000" />
+      <workItem from="1627613862660" duration="407000" />
+      <workItem from="1627614342952" duration="196000" />
     </task>
     <servers />
   </component>

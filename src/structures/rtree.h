@@ -10,9 +10,10 @@
 using namespace std;
 
 class Rtree {
-    string fileName;
+    string tripFileName;
+    string neighborhoodFileName;
 public:
-    explicit Rtree(string fileName);
+    explicit Rtree(string tripFileName, string neighborhoodFileName);
 
     vector<Trip> sameNeighborhood();
 
