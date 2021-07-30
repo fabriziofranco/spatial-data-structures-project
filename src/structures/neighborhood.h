@@ -2,6 +2,7 @@
 #ifndef SPATIAL_DATA_STRUCTURES_PROJECT_NEIGHBORHOOD_H
 #define SPATIAL_DATA_STRUCTURES_PROJECT_NEIGHBORHOOD_H
 
+///longitud , latitud en el json
 
 class Neighborhood {
 

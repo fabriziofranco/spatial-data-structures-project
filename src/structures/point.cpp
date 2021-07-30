@@ -1,12 +1,12 @@
 
 #include "point.h"
 
-double Point::getX() const {
-    return x;
+Point::Point(double latitude, double longitud) : latitude(latitude), longitud(longitud) {}
+
+double Point::getLatitude() const {
+    return latitude;
 }
 
-double Point::getY() const {
-    return y;
+double Point::getLongitud() const {
+    return longitud;
 }
-
-Point::Point(double x, double y) : x(x), y(y) {}

@@ -5,14 +5,14 @@
 
 class Point{
 
-    double x, y;
+    double latitude, longitud;
 
 public:
-    Point(double x, double y);
+    Point(double latitude, double longitud);
 
-    double getX() const;
+    double getLatitude() const;
 
-    double getY() const;
+    double getLongitud() const;
 };
 
 
