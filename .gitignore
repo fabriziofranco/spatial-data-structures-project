@@ -1,3 +1,7 @@
+CMakeLists.txt
+cmake-build-debug
+src/data
+
 # Prerequisites
 *.d
 
