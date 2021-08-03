@@ -10,10 +10,12 @@
 #include <vector>
 #include "rectangle.h"
 #include <limits.h>
+#include <string>
 
 using namespace std;
 
 class Neighborhood {
+    string name;
     Rectangle _mbr;
     multiset<Trip> begin_here;
     multiset<Trip> end_here;
@@ -21,8 +23,9 @@ class Neighborhood {
 
 public:
     Rectangle getMBR();
-    Neighborhood(vector<Point> points);
+    Neighborhood(vector<Point> points,string nombre);
     Neighborhood();
+    string getName(){ return this->name; }
 };
 
 

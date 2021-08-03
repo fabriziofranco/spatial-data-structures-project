@@ -18,8 +18,8 @@ class Rtree {
     int m_min;
     int m_max;
 
-    RNode* root;
 public:
+    RNode* root;
     explicit Rtree(string tripFileName, string neighborhoodFileName, int m_min, int m_max);
 
     vector<Trip> sameNeighborhood();
@@ -33,6 +33,8 @@ public:
     void insert(Neighborhood& neighborhood, RNode* node);
 
     void static_insert(vector<Neighborhood> neighborhoods);
+
+    Neighborhood search(Point point, RNode* node);
 };
 
 
