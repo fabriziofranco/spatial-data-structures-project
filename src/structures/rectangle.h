@@ -25,6 +25,10 @@ public:
         return (this->_max.getLatitude() - this->_min.getLatitude()) * (this->_max.getLongitud() - this->_min.getLongitud());
     }
 
+    bool intersects(Rectangle rectangle) const {
+        if (_max.getLongitud() < rectangle._min.getLongitud() || rectangle._)
+    }
+
 };
 
 #endif

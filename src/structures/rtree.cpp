@@ -40,6 +40,7 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_m
         neighborhoods.push_back(barrio);
     }
 
+    this->neighborhoods=neighborhoods;
     this->static_insert(neighborhoods);
 
     //Parser aquí https://github.com/ben-strasser/fast-cpp-csv-parser
@@ -55,10 +56,13 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_m
         NeighborhoodPickUp->addBeginHere(trip);
         NeighborhoodDropOff->addEndHere(trip);
 
-            NeighborhoodPickUp->addTotalTrip();
+        NeighborhoodPickUp->addTotalTrip();
             
         if(NeighborhoodPickUp != NeighborhoodDropOff){
             NeighborhoodDropOff->addTotalTrip();
+        }
+        else{
+            this->commonBeginAndEndTrips.push_back(trip);
         }
     }
     

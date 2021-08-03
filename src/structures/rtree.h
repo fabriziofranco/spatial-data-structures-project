@@ -14,7 +14,8 @@ using namespace std;
 class Rtree {
     string tripFileName;
     string neighborhoodFileName;
-    
+    vector<Neighborhood*> neighborhoods;
+    vector<Trip> commonBeginAndEndTrips;
     int m_min;
     int m_max;
 

@@ -34,7 +34,10 @@ public:
         end_here.insert(trip);
     }
 
-    void addTotalTrip(){total_trips++;}
+
+    void addTotalTrip(){
+        total_trips++;
+    }
 
 };
 
