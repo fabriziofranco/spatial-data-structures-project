@@ -14,9 +14,7 @@ UPDATE trips SET dropoff_geom = ST_SetSRID(ST_MakePoint(dropoff_longitude, dropo
 
 -- Cantidad de viajes 
 SELECT COUNT(trips.id)
-FROM trips trips;
-
-
+FROM trips;
 
 -----------------------------------------------------------------------------
 -- CONSULTA 1 - ¿Qué viajes tuvieron como origen y destino el mismo barrio?
@@ -24,14 +22,14 @@ FROM trips trips;
 
 -- Número de viajes
 SELECT COUNT(trips.id)
-FROM trips trips
+FROM trips
 JOIN taxi_zones zones
 ON ST_Intersects(trips.pickup_geom, zones.geom) AND ST_Intersects(trips.dropoff_geom, zones.geom);
 
 
 -- Primeros 10 viajes
 SELECT trips.id, zones.zone as neighborhood, trips.pickup_latitude, trips.pickup_longitude, trips.dropoff_latitude, trips.dropoff_longitude
-FROM trips trips
+FROM trips
 JOIN taxi_zones zones
 ON ST_Intersects(trips.pickup_geom, zones.geom) AND ST_Intersects(trips.dropoff_geom, zones.geom)
 LIMIT 10;
@@ -44,7 +42,7 @@ LIMIT 10;
 -----------------------------------------------------------------------------
 
 SELECT zones.zone as neighborhood, COUNT(zones.zone) 
-FROM trips trips
+FROM trips
 JOIN taxi_zones zones
 ON ST_Intersects(trips.pickup_geom, zones.geom)
 GROUP BY zones.zone
@@ -58,7 +56,7 @@ LIMIT 5;
 -----------------------------------------------------------------------------
 
 SELECT COUNT(trips.id)
-FROM trips trips
+FROM trips
 WHERE ST_Intersects(trips.pickup_geom,
 						ST_MakeEnvelope( -73.907257080078125, 40.773754119873047, --P1
 									 	 -73.991691589355469, 40.691108703613281, --P2

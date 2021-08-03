@@ -39,7 +39,7 @@ y efectivamente nos encontramos con **1 508 501** viajes.
 ```SQL
 -- Número de viajes
 SELECT COUNT(trips.id)
-FROM trips trips
+FROM trips
 JOIN taxi_zones zones
 ON ST_Intersects(trips.pickup_geom, zones.geom) AND ST_Intersects(trips.dropoff_geom, zones.geom);
 ```
@@ -54,7 +54,7 @@ Ahora, para validar la veracidad de la consulta, realizamos una pequeña variaci
 ```SQL
 -- Primeros 10 viajes
 SELECT trips.id, zones.zone as neighborhood, trips.pickup_latitude, trips.pickup_longitude, trips.dropoff_latitude, trips.dropoff_longitude
-FROM trips trips
+FROM trips
 JOIN taxi_zones zones
 ON ST_Intersects(trips.pickup_geom, zones.geom) AND ST_Intersects(trips.dropoff_geom, zones.geom)
 LIMIT 10;
@@ -94,7 +94,7 @@ la sentencia **GROUP BY** de SQL. Asimismo, la intersección la realizamos con l
 de partida como lo solicita el ejercicio.
 ```SQL
 SELECT zones.zone as neighborhood, COUNT(zones.zone)
-FROM trips trips
+FROM trips
 JOIN taxi_zones zones
 ON ST_Intersects(trips.pickup_geom, zones.geom)
 GROUP BY zones.zone
@@ -152,7 +152,7 @@ Luego, apoyados del `ST_Intersects` realizamos la intersección respectiva con n
 
 ```SQL
 SELECT COUNT(trips.id)
-FROM trips trips
+FROM trips
 WHERE ST_Intersects(trips.pickup_geom,
         ST_MakeEnvelope( -73.907257080078125, 40.773754119873047, --P1
                          -73.991691589355469, 40.691108703613281, --P2
