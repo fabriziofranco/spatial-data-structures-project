@@ -18,6 +18,8 @@ class Rtree {
     int m_min;
     int m_max;
 
+    vector<Neighborhood*> range_search(Rectangle window_query, RNode* node, vector<Neighborhood*>& result);
+
 public:
     RNode* root;
     explicit Rtree(string tripFileName, string neighborhoodFileName, int m_min, int m_max);

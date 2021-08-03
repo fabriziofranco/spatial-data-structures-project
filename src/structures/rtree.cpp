@@ -9,7 +9,7 @@
 #include <jsoncpp/json/reader.h>
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/json.h>
-
+#include "../utils/csv.h"
 
 Rtree::Rtree(string tripFileName, string neighborhoodFileName, int m_min, int m_max):
 tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_min), m_max(m_max) {
@@ -41,6 +41,16 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_m
     }
 
     this->static_insert(neighborhoods);
+    
+
+    io::CSVReader<5> in(tripFileName);
+    in.read_header(io::ignore_extra_column, "pickup_longitude", "pickup_latitude", "dropoff_longitude", "dropoff_latitude", "trip_distance");
+    double pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, trip_distance;
+    while(in.read_row(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, trip_distance)){
+        Trip trip(Point(pickup_longitude, pickup_latitude),Point(dropoff_longitude, dropoff_latitude),trip_distance);
+    }
+    
+
     
    //generar el conjunto de 
    Trip trip(Point(0,0), Point(0,0),0);
@@ -188,10 +198,17 @@ Neighborhood* Rtree::search(Point point, RNode* node) {
 }
 
 vector<Neighborhood*> Rtree::range_search(Rectangle window_query) {
-    vector<Neigh
-    this->range_search(window_query, this->root);
+    vector<Neighborhood*> result;
+    this->range_search(window_query, this->root, result);
+    return result;
 }
 
-void Rtree::range_search(Rectangle window_query, RNode* node) {
-
+void Rtree::range_search(Rectangle window_query, RNode* node, vector<Neighborhood*>& result) {
+    if (node->isLeaf()) {
+        for (Neighborhood* neighborhood : node->getNeighborhoods) {
+            if (window_query.contains(neighborhood->getMBR())) {
+                result.push_back(neighborhood);
+            }
+        }
+    }
 }
