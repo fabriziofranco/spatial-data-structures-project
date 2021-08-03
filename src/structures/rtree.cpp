@@ -48,21 +48,22 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_m
     double pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, trip_distance;
     while(in.read_row(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, trip_distance)){
         Trip trip(Point(pickup_longitude, pickup_latitude),Point(dropoff_longitude, dropoff_latitude),trip_distance);
+        
+        Neighborhood * NeighborhoodPickUp = this->search(trip.getPickup(),this->root); 
+        Neighborhood * NeighborhoodDropOff = this->search(trip.getDropoff(),this->root); 
+   
+        NeighborhoodPickUp->addBeginHere(trip);
+        NeighborhoodDropOff->addEndHere(trip);
+
+            NeighborhoodPickUp->addTotalTrip();
+            
+        if(NeighborhoodPickUp != NeighborhoodDropOff){
+            NeighborhoodDropOff->addTotalTrip();
+        }
     }
     
    //generar el conjunto de 
-   Trip trip(Point(0,0), Point(0,0),0);
-   Neighborhood * NeighborhoodPickUp = this->search(trip.getPickup(),this->root); 
-   Neighborhood * NeighborhoodDropOff = this->search(trip.getDropoff(),this->root); 
-   
-   NeighborhoodPickUp->addBeginHere(trip);
-   NeighborhoodDropOff->addEndHere(trip);
 
-    NeighborhoodPickUp->addTotalTrip();
-    
-   if(NeighborhoodPickUp != NeighborhoodDropOff){
-       NeighborhoodDropOff->addTotalTrip();
-   }
 }
 
 vector<Trip> Rtree::sameNeighborhood() {
@@ -203,7 +204,7 @@ vector<Neighborhood*> Rtree::range_search(Rectangle window_query) {
 
 void Rtree::range_search(Rectangle window_query, RNode* node, vector<Neighborhood*>& result) {
     if (node->isLeaf()) {
-        for (Neighborhood* neighborhood : node->getNeighborhoods) {
+        for (Neighborhood* neighborhood : node->getNeighborhoods()) {
             if (window_query.contains(neighborhood->getMBR())) {
                 result.push_back(neighborhood);
             }
