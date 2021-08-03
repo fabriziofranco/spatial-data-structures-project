@@ -8,17 +8,20 @@
 #include <set>
 #include "point.h"
 #include <vector>
+#include "rectangle.h"
 
 using namespace std;
 
 class Neighborhood {
-    //MBR
+    Rectangle _mbr;
     multiset<Trip> begin_here;
     multiset<Trip> end_here;
+    vector<Point> edges;
 
+    Neighborhood(vector<Point> points);
 
-
-    Neighborhood(vector<Trip> trips, vector<Point> points);
+public:
+    Rectangle getMBR();
 };
 
 

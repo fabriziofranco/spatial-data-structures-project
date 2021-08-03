@@ -13,6 +13,10 @@ public:
     double getLatitude() const;
 
     double getLongitud() const;
+
+    // Point minBetweenPoints(Point& p1, Point& p2);
+
+    // Point maxBetweenPoints(Point& p1, Point& p2);
 };
 
 

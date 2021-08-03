@@ -3,14 +3,15 @@
 
 #include <vector>
 #include "rectangle.h"
+#include "neighborhood.h"
 
 class RNode {
 public:
     RNode(bool isLeaf):_isLeaf(isLeaf){}
 
-    bool add(Point p, int &max_m){
-        if(_points.size() < max_m) {
-            _points.push_back(p);
+    bool addNeighborhood(Neighborhood& neighborhood, int& max_m){
+        if(_neighborhoods.size() < max_m) {
+            _neighborhoods.push_back(neighborhood);
             return true;
         }
         return false;
@@ -20,16 +21,29 @@ public:
         return _children;
     }
 
-    std::vector<Point> getPoints(){
-        return _points;
+    std::vector<Neighborhood> getPoints(){
+        return _neighborhoods;
+    }
+
+    bool isLeaf() {
+        return this->_isLeaf;
+    }
+
+    Rectangle getMBR() {
+        return this->_mbr;
+    }
+
+    void setMBR(Rectangle newMBR) {
+        this->_mbr = newMBR;
     }
 
 private:
-    std::vector<Point> _points;
+    std::vector<Neighborhood> _neighborhoods;
     bool _isLeaf;
 
     std::vector<RNode*> _children;
-    std::vector<Rectangle> _mbrs;
+    // std::vector<Rectangle> _mbrs;
+    Rectangle _mbr;
 };
 
 #endif

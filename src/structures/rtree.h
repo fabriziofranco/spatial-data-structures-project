@@ -8,6 +8,7 @@
 #include "neighborhood.h"
 #include "point.h"
 #include "rtree_node.h"
+#include <limits.h>
 using namespace std;
 
 class Rtree {
@@ -29,7 +30,7 @@ public:
 
     vector<Trip> maxDistance(Point point, double distance);
 
-    void insert(Neighborhood neighborhood);
+    void insert(Neighborhood& neighborhood, RNode* node);
 };
 
 
