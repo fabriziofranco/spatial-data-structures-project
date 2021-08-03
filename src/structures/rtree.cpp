@@ -210,5 +210,8 @@ void Rtree::range_search(Rectangle window_query, RNode* node, vector<Neighborhoo
                 result.push_back(neighborhood);
             }
         }
+    } else {
+        for (RNode* child : node->getChildren()) {
+        }
     }
 }
