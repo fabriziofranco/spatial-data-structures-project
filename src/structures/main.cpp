@@ -20,7 +20,9 @@ int main() {
     // cout << "name 2: " << n2->getName() << "\n";
     // cout << "name 3: " << n3->getName() << "\n";
     
+    cout << "consulta 1"
     rtree.sameNeighborhood();
-    // rtree.kNeighborhoodsMostTrips(5);
+    rtree.kNeighborhoodsMostTrips(5);
+    rtree.beginInRegion(Point(40.773754119873047, -73.907257080078125), Point(40.691108703613281, -73.991691589355469));
     return 0;
 }

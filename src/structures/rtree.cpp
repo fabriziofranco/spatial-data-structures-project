@@ -67,10 +67,6 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_m
         if(NeighborhoodDropOff)
             NeighborhoodDropOff->addEndHere(trip);
 
-        // if(NeighborhoodDropOff==nullptr) cout<<"null";
-        // if(NeighborhoodPickUp==nullptr) cout<<"null";
-        // bool  aasd = NeighborhoodDropOff->getName()==NeighborhoodPickUp->getName();
-        // cout<<aasd;
 
 
         if(NeighborhoodPickUp != NeighborhoodDropOff){
@@ -110,6 +106,7 @@ int Rtree::beginInRegion(Point p1, Point p2) {
     int total_trips = 0;
     for (Neighborhood* n : neighborhoods)
         total_trips += n->getBeginHere().size();
+    cout << total_trips << "\n";
     return total_trips;
 }
 
