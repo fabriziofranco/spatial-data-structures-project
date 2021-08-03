@@ -32,9 +32,11 @@ public:
 
     void insert(Neighborhood& neighborhood, RNode* node);
 
-    void static_insert(vector<Neighborhood> neighborhoods);
+    void static_insert(vector<Neighborhood*> neighborhoods);
 
-    Neighborhood search(Point point, RNode* node);
+    Neighborhood* search(Point point, RNode* node);
+
+    vector<Neighborhood*> range_search(Rectangle window_query);
 };
 
 

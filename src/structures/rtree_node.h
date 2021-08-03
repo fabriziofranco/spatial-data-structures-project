@@ -9,7 +9,7 @@ class RNode {
 public:
     RNode(bool isLeaf):_isLeaf(isLeaf){}
 
-    bool addNeighborhood(Neighborhood& neighborhood, int& max_m){
+    bool addNeighborhood(Neighborhood* neighborhood, int& max_m){
         if(_neighborhoods.size() < max_m) {
             _neighborhoods.push_back(neighborhood);
             return true;
@@ -29,7 +29,7 @@ public:
         return _children;
     }
 
-    std::vector<Neighborhood> getNeighborhoods(){
+    std::vector<Neighborhood*> getNeighborhoods(){
         return _neighborhoods;
     }
 
@@ -46,7 +46,7 @@ public:
     }
 
 private:
-    std::vector<Neighborhood> _neighborhoods;
+    std::vector<Neighborhood*> _neighborhoods;
     bool _isLeaf;
 
     std::vector<RNode*> _children;
