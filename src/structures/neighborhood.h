@@ -9,6 +9,7 @@
 #include "point.h"
 #include <vector>
 #include "rectangle.h"
+#include <limits.h>
 
 using namespace std;
 
@@ -18,12 +19,10 @@ class Neighborhood {
     multiset<Trip> end_here;
     vector<Point> edges;
 
-    Neighborhood(vector<Point> points);
-    
-    Neighborhood()=default;
-
 public:
     Rectangle getMBR();
+    Neighborhood(vector<Point> points);
+    Neighborhood();
 };
 
 

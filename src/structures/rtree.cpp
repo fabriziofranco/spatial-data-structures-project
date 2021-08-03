@@ -17,7 +17,7 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_m
     // inicializar árbol
     this->root = new RNode(true);
     // end inicializar árbol
-
+    vector<Neighborhood> neighborhoods;
     ifstream ifs(neighborhoodFileName);
     Json::Reader reader;
     Json::Value val;
@@ -27,7 +27,7 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_m
     }
 
     int sz = val.size();
-    cout<<sz<<endl;
+    // cout<<sz<<endl;
     for (int i = 0; i < sz; ++i) {
         vector<Point> points;
         Json::Value puntos= val[i]["geometry"]["coordinates"];
@@ -35,19 +35,11 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_m
             points.push_back(Point(puntos[0][j][1].asDouble(),puntos[0][j][0].asDouble()));
         }
 
-        for(auto x: points)
-            cout<<"latitud"<<x.getLatitude()<<" longitud: "<<x.getLongitud()<<endl;
-
-
-    // cout << "Book: " << obj["book"].asString() << endl;
-    // cout << "Year: " << obj["year"].asUInt() << endl;
-    // const Json::Value& characters = obj["characters"]; // array of characters
-    // for (int i = 0; i < characters.size(); i++){
-    //     cout << "    name: " << characters[i]["name"].asString();
-    //     cout << " chapter: " << characters[i]["chapter"].asUInt();
-    //     cout << endl;
-    // }
+        Neighborhood barrio(points);
+        neighborhoods.push_back(barrio);
     }
+
+    this->static_insert(neighborhoods);
 }
 
 vector<Trip> Rtree::sameNeighborhood() {
@@ -66,6 +58,94 @@ vector<Trip> Rtree::maxDistance(Point point, double distance) {
     return vector<Trip>();
 }
 
+void Rtree::static_insert(vector<Neighborhood> neighborhoods) {
+    // generar nodos hoja
+    RNode* temp = new RNode(true);
+    vector<RNode*> nodes;
+    temp->addNeighborhood(neighborhoods.front(), m_max);
+    temp->setMBR(neighborhoods.front().getMBR());
+    neighborhoods.erase(neighborhoods.begin());
+    while (neighborhoods.size() > 0) {
+        // find best neighborhood to merge with
+        Neighborhood best_nh;
+        int best_area = INT_MAX;
+        Rectangle best_new_mbr;
+        int best_nh_pos = 0;
+        for (int i = 0; i < neighborhoods.size(); ++i) {
+            Neighborhood current_nh = neighborhoods[i];
+            Rectangle new_mbr(
+                Point(
+                    min(temp->getMBR()._min.getLatitude(), current_nh.getMBR()._min.getLatitude()),
+                    min(temp->getMBR()._min.getLongitud(), current_nh.getMBR()._min.getLongitud())
+                ),
+                Point(
+                    max(temp->getMBR()._max.getLatitude(), current_nh.getMBR()._max.getLatitude()),
+                    max(temp->getMBR()._max.getLatitude(), current_nh.getMBR()._max.getLatitude())
+                )
+            );
+            if (new_mbr.getArea() < best_area) {
+                best_nh = current_nh;
+                best_new_mbr = new_mbr;
+                best_nh_pos = i;
+            }
+        }
+        // update mbr and addNeighborhood sibling
+        temp->setMBR(best_new_mbr);
+        if (!temp->addNeighborhood(best_nh, m_max)) {
+            RNode* new_leaf = new RNode(true);
+            *new_leaf = *temp;
+            nodes.push_back(new_leaf);
+            temp = new RNode(true);
+            temp->addNeighborhood(best_nh, m_max);
+        }
+        neighborhoods.erase(neighborhoods.begin() + best_nh_pos);
+    }
+    // creación de hojas terminada
+
+    // inicio de creación de nodos internos
+    temp = new RNode(false);
+    temp->addChild(nodes.front(), m_max);
+    temp->setMBR(nodes.front()->getMBR());
+    nodes.erase(nodes.begin());
+    while (nodes.size() > 0) {
+        cout << "size " << nodes.size() << "\n";
+        RNode* best_child;
+        int best_area = INT_MAX;
+        Rectangle best_new_mbr;
+        int best_child_pos = 0;
+        for (int i = 0; i < nodes.size(); ++i) {
+            // cout << "i " << i << "\n";
+            RNode* current_node = nodes[i];
+            Rectangle new_mbr(
+                Point(
+                    min(temp->getMBR()._min.getLatitude(), current_node->getMBR()._min.getLatitude()),
+                    min(temp->getMBR()._min.getLongitud(), current_node->getMBR()._min.getLongitud())
+                ),
+                Point(
+                    max(temp->getMBR()._max.getLatitude(), current_node->getMBR()._max.getLatitude()),
+                    max(temp->getMBR()._max.getLatitude(), current_node->getMBR()._max.getLatitude())
+                )
+            );
+            if (new_mbr.getArea() < best_area) {
+                best_child = current_node;
+                best_new_mbr = new_mbr;
+                best_child_pos = i;
+            }
+        }
+        cout << "terminé de encontrar al mejor hijo\n";
+        // update mbr and addNeighborhood sibling
+        temp->setMBR(best_new_mbr);
+        cout << "nuevo mbr seteado\n";
+        if (!temp->addChild(best_child, m_max)) {
+            RNode* new_node = new RNode(false);
+            *new_node = *temp;
+            nodes.push_back(new_node);
+            temp = new RNode(false);
+            temp->addChild(best_child, m_max);
+        }
+        nodes.erase(nodes.begin() + best_child_pos);
+    }
+}
 
 // F
 void Rtree::insert(Neighborhood& neighborhood, RNode* node) {
@@ -110,110 +190,3 @@ void Rtree::insert(Neighborhood& neighborhood, RNode* node) {
     }
 }
 
-void Rtree::static_insert(vector<Neighborhood> neighborhoods) {
-    // Neighborhood min_neighborhood = neighborhoods.front();
-    // int min_neighborhood_index = 0;
-    // for (int i = 0; i < neighborhoods.size(); ++i) {
-    //     Neighborhood neighborhood = neighborhoods[i];
-    //     if (min_neighborhood.getMBR()._min.getLatitude() > neighborhood.getMBR()._min.getLatitude 
-    //         && min_neighborhood.getMBR()._min.getLongitude > neighborhood.getMBR()._min.getLongitude()) {
-    //         min_neighborhood = neighborhood;
-    //         min_neighborhood_index = i;
-    //     }
-    // }
-
-    // // borrar el min neighborhood
-    // neighborhoods.erase(neighborhoods.begin() + min_neighborhood_index);
-
-    // while (neighborhoods.size() > 0) {
-    //     // encontrar el mejor nodo para hacer la inserción
-    //     for (int i = 0; i < neighborhoods.size(); ++i) {
-
-    //     }
-    // }
-
-    // generar nodos hoja
-    RNode* temp = new RNode(true);
-    vector<RNode*> nodes;
-    temp->addNeighborhood(neighborhoods.front());
-    temp->setMBR(neighborhoods.front().getMBR());
-    neighborhoods.erase(neighborhoods.begin());
-    while (neighborhoods.size() > 0) {
-        // find best neighborhood to merge with
-        Neighborhood best_nh();
-        int best_area = INT_MAX;
-        Rectangle best_new_mbr;
-        int best_nh_pos = 0;
-        for (int i = 0; i < neighborhoods.size(); ++i) {
-            Neighborhood current_nh = neighborhoods[i];
-            Rectangle new_mbr(
-                Point(
-                    min(temp->getMBR()._min.getLatitude(), current_nh.getMBR()._min.getLatitude()),
-                    min(temp->getMBR()._min.getLongitud(), current_nh.getMBR()._min.getLongitud())
-                ),
-                Point(
-                    max(temp->getMBR()._max.getLatitude(), current_nh.getMBR()._max.getLatitude()),
-                    max(temp->getMBR()._max.getLatitude(), current_nh.getMBR()._max.getLatitude())
-                )
-            );
-            if (new_mbr.getArea() < best_area) {
-                best_nh = current_nh;
-                best_new_mbr = new_mbr;
-                best_nh_pos = i;
-            }
-        }
-        // update mbr and addNeighborhood sibling
-        temp->setMBR(best_new_mbr);
-        if (!temp->addNeighborhood(best_nh, m_max)) {
-            RNode* new_leaf = new RNode(true);
-            *new_leaf = *temp;
-            nodes.push_back(new_leaf);
-            temp = new RNode(true);
-            temp->addNeighborhood(best_nh, m_max);
-        }
-        neighborhoods.erase(neighborhoods.begin() + best_nh_pos);
-    }
-
-    // creación de hojas terminada
-
-    // inicio de creación de nodos internos
-    temp = new RNode(false);
-    temp->addChild(nodes.front());
-    temp->setMBR(nodes.front().getMBR());
-    nodes.erase(nodes.begin());
-    while (nodes.size() > 0) {
-        RNode* best_child;
-        int best_area = INT_MAX;
-        Rectangle best_new_mbr;
-        int best_child_pos = 0;
-        for (int i = 0; i < nodes.size(); ++i) {
-            RNode* current_node = nodes[i];
-            Rectangle new_mbr(
-                Point(
-                    min(temp->getMBR()._min.getLatitude(), current_node.getMBR()._min.getLatitude()),
-                    min(temp->getMBR()._min.getLongitud(), current_node.getMBR()._min.getLongitud())
-                ),
-                Point(
-                    max(temp->getMBR()._max.getLatitude(), current_node.getMBR()._max.getLatitude()),
-                    max(temp->getMBR()._max.getLatitude(), current_node.getMBR()._max.getLatitude())
-                )
-            );
-            if (new_mbr.getArea() < best_area) {
-                best_child = current_node;
-                best_new_mbr = new_mbr;
-                best_child_pos = i;
-            }
-        }
-        // update mbr and addNeighborhood sibling
-        temp->setMBR(best_new_mbr);
-        if (!temp->addNeighborhood(best_child, m_max)) {
-            RNode* new_node = new RNode(false);
-            *new_node = *temp;
-            nodes.push_back(new_node);
-            temp = new RNode(false);
-            temp->addNeighborhood(best_child, m_max);
-        }
-        neighborhoods.erase(neighborhoods.begin() + best_child_pos);
-    }
-
-}
