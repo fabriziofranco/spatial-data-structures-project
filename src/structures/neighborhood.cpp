@@ -1,9 +1,9 @@
 
 #include "neighborhood.h"
 
-Neighborhood::Neighborhood(vector<Point> points){
-    this->edges= points;
-
+Neighborhood::Neighborhood(vector<Point> points, string nombre){
+    this->edges = points;
+    this->name=nombre;
     double min_x, min_y, max_x, max_y;
     min_x = min_y = INT_MAX;
     max_x = max_y = INT_MIN;

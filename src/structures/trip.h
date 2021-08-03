@@ -2,13 +2,15 @@
 #ifndef SPATIAL_DATA_STRUCTURES_PROJECT_TRIP_H
 #define SPATIAL_DATA_STRUCTURES_PROJECT_TRIP_H
 
+#include "point.h"
 
 class Trip {
-    float Pickup_longitude, Pickup_latitude;
-    float Dropoff_longitude, Dropoff_latitud;
-    float Trip_distance;
+    Point Pickup;
+    Point Dropoff;
+    double distance;
 
-
+    Trip(Point p1, Point p2, double distancia) : Pickup(p1), Dropoff(p2), distance(distancia){}
+    
 };
 
 

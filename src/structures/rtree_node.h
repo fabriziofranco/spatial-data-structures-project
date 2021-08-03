@@ -29,7 +29,7 @@ public:
         return _children;
     }
 
-    std::vector<Neighborhood> getPoints(){
+    std::vector<Neighborhood> getNeighborhoods(){
         return _neighborhoods;
     }
 
@@ -50,7 +50,6 @@ private:
     bool _isLeaf;
 
     std::vector<RNode*> _children;
-    // std::vector<Rectangle> _mbrs;
     Rectangle _mbr;
 };
 
