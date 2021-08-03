@@ -7,13 +7,19 @@
 #include "trip.h"
 #include "neighborhood.h"
 #include "point.h"
+#include "rtree_node.h"
 using namespace std;
 
 class Rtree {
     string tripFileName;
     string neighborhoodFileName;
+    
+    int m_min;
+    int m_max;
+
+    RNode* root;
 public:
-    explicit Rtree(string tripFileName, string neighborhoodFileName);
+    explicit Rtree(string tripFileName, string neighborhoodFileName, int m_min, int m_max);
 
     vector<Trip> sameNeighborhood();
 
@@ -22,6 +28,8 @@ public:
     vector<Trip> beginOrEndInRegion(Point p1, Point p2);
 
     vector<Trip> maxDistance(Point point, double distance);
+
+    void insert(Neighborhood neighborhood);
 };
 
 

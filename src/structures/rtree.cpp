@@ -11,8 +11,8 @@
 #include <jsoncpp/json/json.h>
 
 
-Rtree::Rtree(string tripFileName, string neighborhoodFileName):
-tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName){
+Rtree::Rtree(string tripFileName, string neighborhoodFileName, int m_min, int m_max):
+tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_min), m_max(m_max) {
 
     ifstream ifs(neighborhoodFileName);
     Json::Reader reader;
@@ -25,9 +25,16 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName){
     int sz = val.size();
     cout<<sz<<endl;
     for (int i = 0; i < sz; ++i) {
-        std::cout << val[i]["properties"]["neighborhood"].asString();
-        std::cout << std::endl;
+        vector<Point> points;
+        Json::Value puntos= val[i]["geometry"]["coordinates"];
+        for(int j=0; j < puntos[0].size(); ++j) {
+            points.push_back(Point(puntos[0][j][1].asDouble(),puntos[0][j][0].asDouble()));
+        }
 
+        for(auto x: points)
+            cout<<"latitud"<<x.getLatitude()<<" longitud: "<<x.getLongitud()<<endl;
+
+        
     // cout << "Book: " << obj["book"].asString() << endl;
     // cout << "Year: " << obj["year"].asUInt() << endl;
     // const Json::Value& characters = obj["characters"]; // array of characters
@@ -53,4 +60,8 @@ vector<Trip> Rtree::beginOrEndInRegion(Point p1, Point p2) {
 
 vector<Trip> Rtree::maxDistance(Point point, double distance) {
     return vector<Trip>();
+}
+
+void Rtree::insert(Neighborhood neighborhood) {
+
 }

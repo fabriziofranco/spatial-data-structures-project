@@ -4,8 +4,21 @@
 
 ///longitud , latitud en el json
 
-class Neighborhood {
+#include "trip.h"
+#include <set>
+#include "point.h"
+#include <vector>
 
+using namespace std;
+
+class Neighborhood {
+    //MBR
+    multiset<Trip> begin_here;
+    multiset<Trip> end_here;
+
+
+
+    Neighborhood(vector<Trip> trips, vector<Point> points);
 };
 
 
