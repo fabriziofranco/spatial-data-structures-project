@@ -104,8 +104,12 @@ int Rtree::beginInRegion(Point p1, Point p2) {
     Rectangle window_query(p1, p2);
     vector<Neighborhood*> neighborhoods = this->range_search(window_query);
     int total_trips = 0;
-    for (Neighborhood* n : neighborhoods)
-        total_trips += n->getBeginHere().size();
+    for (Neighborhood* n : neighborhoods) {
+        for (Trip &p : n->getBeginHere()) {
+            if (window_query.contains(p.getPickup()))
+                total_trips += n->getBeginHere().size();
+        }
+    }
     cout << total_trips << "\n";
     return total_trips;
 }
@@ -237,13 +241,14 @@ vector<Neighborhood*> Rtree::range_search(Rectangle& window_query) {
 void Rtree::range_search_helper(Rectangle& window_query, RNode* node, vector<Neighborhood*>& result) {
     if (node->isLeaf()) {
         for (Neighborhood* neighborhood : node->getNeighborhoods()) {
-            if (window_query.contains(neighborhood->getMBR())) {
+            if (window_query.intersects(neighborhood->getMBR())) {
                 result.push_back(neighborhood);
             }
         }
     } else {
         for (RNode* child : node->getChildren()) {
             if (window_query.intersects(child->getMBR())) {
+                cout << "intersects\n";
                 return range_search_helper(window_query, child, result);
             }
         }
