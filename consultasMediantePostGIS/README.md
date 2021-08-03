@@ -32,7 +32,7 @@ FROM trips trips;
 y efectivamente nos encontramos con **1 508 501** viajes.
 
 
-##Consulta 1
+## Consulta 1
 
 ¿Qué viajes tuvieron como origen y destino el mismo barrio?
 
