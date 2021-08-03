@@ -41,16 +41,14 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_m
     }
 
     this->static_insert(neighborhoods);
-    
 
+    //Parser aquí https://github.com/ben-strasser/fast-cpp-csv-parser
     io::CSVReader<5> in(tripFileName);
     in.read_header(io::ignore_extra_column, "pickup_longitude", "pickup_latitude", "dropoff_longitude", "dropoff_latitude", "trip_distance");
     double pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, trip_distance;
     while(in.read_row(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, trip_distance)){
         Trip trip(Point(pickup_longitude, pickup_latitude),Point(dropoff_longitude, dropoff_latitude),trip_distance);
     }
-    
-
     
    //generar el conjunto de 
    Trip trip(Point(0,0), Point(0,0),0);
