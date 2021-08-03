@@ -134,19 +134,19 @@ void Rtree::static_insert(vector<Neighborhood> neighborhoods) {
 
     // generar nodos hoja
     RNode* temp = new RNode(true);
-    vector<Rnode*> nodes;
+    vector<RNode*> nodes;
     temp->addNeighborhood(neighborhoods.front());
-    temp->setMBR(neighborhood.front().getMBR());
+    temp->setMBR(neighborhoods.front().getMBR());
     neighborhoods.erase(neighborhoods.begin());
     while (neighborhoods.size() > 0) {
         // find best neighborhood to merge with
-        Neighborhood best_nh;
+        Neighborhood best_nh();
         int best_area = INT_MAX;
         Rectangle best_new_mbr;
         int best_nh_pos = 0;
         for (int i = 0; i < neighborhoods.size(); ++i) {
             Neighborhood current_nh = neighborhoods[i];
-            Rectange new_mbr(
+            Rectangle new_mbr(
                 Point(
                     min(temp->getMBR()._min.getLatitude(), current_nh.getMBR()._min.getLatitude()),
                     min(temp->getMBR()._min.getLongitud(), current_nh.getMBR()._min.getLongitud())
@@ -188,7 +188,7 @@ void Rtree::static_insert(vector<Neighborhood> neighborhoods) {
         int best_child_pos = 0;
         for (int i = 0; i < nodes.size(); ++i) {
             RNode* current_node = nodes[i];
-            Rectange new_mbr(
+            Rectangle new_mbr(
                 Point(
                     min(temp->getMBR()._min.getLatitude(), current_node.getMBR()._min.getLatitude()),
                     min(temp->getMBR()._min.getLongitud(), current_node.getMBR()._min.getLongitud())

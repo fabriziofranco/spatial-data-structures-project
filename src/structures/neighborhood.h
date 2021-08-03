@@ -19,6 +19,8 @@ class Neighborhood {
     vector<Point> edges;
 
     Neighborhood(vector<Point> points);
+    
+    Neighborhood()=default;
 
 public:
     Rectangle getMBR();

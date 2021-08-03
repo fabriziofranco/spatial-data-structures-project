@@ -4,9 +4,13 @@
 #include "point.h"
 #include "rectangle.h"
 struct Rectangle{
+    
+public:
     Rectangle(Point min, Point max):_min(min),_max(max){}
     Point _min;
     Point _max;
+
+    Rectangle()=default;
 
     bool contains(Point point) const{
         return _min.getLatitude() <= point.getLatitude() && _min.getLongitud() <= point.getLongitud() &&

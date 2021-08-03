@@ -9,6 +9,8 @@ class Point{
 
 public:
     Point(double latitude, double longitud);
+    
+    Point()= default;
 
     double getLatitude() const;
 

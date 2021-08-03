@@ -17,6 +17,14 @@ public:
         return false;
     }
 
+    bool addChild(RNode* child, int& max_m) {
+        if(_children.size() < max_m) {
+            _children.push_back(child);
+            return true;
+        }
+        return false;
+    }
+
     std::vector<RNode*> getChildren(){
         return _children;
     }

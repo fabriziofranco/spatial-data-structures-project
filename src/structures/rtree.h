@@ -31,6 +31,8 @@ public:
     vector<Trip> maxDistance(Point point, double distance);
 
     void insert(Neighborhood& neighborhood, RNode* node);
+
+    void static_insert(vector<Neighborhood> neighborhoods);
 };
 
 
