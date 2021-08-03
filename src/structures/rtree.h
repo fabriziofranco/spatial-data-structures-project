@@ -19,7 +19,7 @@ class Rtree {
     int m_min;
     int m_max;
 
-    vector<Neighborhood*> range_search(Rectangle window_query, RNode* node, vector<Neighborhood*>& result);
+    void range_search_helper(Rectangle& window_query, RNode* node, vector<Neighborhood*>& result);
 
 public:
     RNode* root;
@@ -29,7 +29,7 @@ public:
 
     vector<Neighborhood> kNeighborhoodsMostTrips(int k);
 
-    vector<Trip> beginOrEndInRegion(Point p1, Point p2);
+    int beginInRegion(Point p1, Point p2);
 
     vector<Trip> maxDistance(Point point, double distance);
 
@@ -39,7 +39,7 @@ public:
 
     Neighborhood* search(Point point, RNode* node);
 
-    vector<Neighborhood*> range_search(Rectangle window_query);
+    vector<Neighborhood*> range_search(Rectangle& window_query);
 };
 
 

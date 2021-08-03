@@ -45,24 +45,41 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_m
 
     //Parser aquí https://github.com/ben-strasser/fast-cpp-csv-parser
     io::CSVReader<5> in(tripFileName);
-    in.read_header(io::ignore_extra_column, "pickup_longitude", "pickup_latitude", "dropoff_longitude", "dropoff_latitude", "trip_distance");
+    in.read_header( io::ignore_extra_column,
+                    "Pickup_longitude",
+                    "Pickup_latitude",
+                    "Dropoff_longitude",
+                    "Dropoff_latitude",
+                    "Trip_distance"
+                    );
     double pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, trip_distance;
     while(in.read_row(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, trip_distance)){
-        Trip trip(Point(pickup_longitude, pickup_latitude),Point(dropoff_longitude, dropoff_latitude),trip_distance);
+        Trip trip(Point(pickup_latitude,pickup_longitude),Point(dropoff_latitude, dropoff_longitude),trip_distance);
         
         Neighborhood * NeighborhoodPickUp = this->search(trip.getPickup(),this->root); 
         Neighborhood * NeighborhoodDropOff = this->search(trip.getDropoff(),this->root); 
-   
-        NeighborhoodPickUp->addBeginHere(trip);
-        NeighborhoodDropOff->addEndHere(trip);
 
-        NeighborhoodPickUp->addTotalTrip();
-            
+        if(NeighborhoodPickUp){
+            NeighborhoodPickUp->addBeginHere(trip);
+            NeighborhoodPickUp->addTotalTrip();
+        }
+
+        if(NeighborhoodDropOff)
+            NeighborhoodDropOff->addEndHere(trip);
+
+        // if(NeighborhoodDropOff==nullptr) cout<<"null";
+        // if(NeighborhoodPickUp==nullptr) cout<<"null";
+        // bool  aasd = NeighborhoodDropOff->getName()==NeighborhoodPickUp->getName();
+        // cout<<aasd;
+
+
         if(NeighborhoodPickUp != NeighborhoodDropOff){
-            NeighborhoodDropOff->addTotalTrip();
+            if(NeighborhoodDropOff)
+                NeighborhoodDropOff->addTotalTrip();
         }
         else{
-            this->commonBeginAndEndTrips.push_back(trip);
+            if(NeighborhoodDropOff and NeighborhoodPickUp)
+                this->commonBeginAndEndTrips.push_back(trip);
         }
     }
     
@@ -71,15 +88,29 @@ tripFileName(tripFileName),neighborhoodFileName(neighborhoodFileName), m_min(m_m
 }
 
 vector<Trip> Rtree::sameNeighborhood() {
-    return vector<Trip>();
+    cout<<this->commonBeginAndEndTrips.size()<<"\n";
+    return this->commonBeginAndEndTrips;
 }
 
 vector<Neighborhood> Rtree::kNeighborhoodsMostTrips(int k) {
-    return vector<Neighborhood>();
+    vector<Neighborhood> copy;
+    for (Neighborhood* n : this->neighborhoods) {
+        copy.push_back(*n);
+    }
+    sort(copy.begin(), copy.end(), greater<Neighborhood>());
+    for (int i = 0; i < k && i < copy.size(); ++i) {
+        cout << copy[i].getName() << "\n";
+    }
+    return vector<Neighborhood>(copy.begin(), copy.begin() + k);
 }
 
-vector<Trip> Rtree::beginOrEndInRegion(Point p1, Point p2) {
-    return vector<Trip>();
+int Rtree::beginInRegion(Point p1, Point p2) {
+    Rectangle window_query(p1, p2);
+    vector<Neighborhood*> neighborhoods = this->range_search(window_query);
+    int total_trips = 0;
+    for (Neighborhood* n : neighborhoods)
+        total_trips += n->getBeginHere().size();
+    return total_trips;
 }
 
 vector<Trip> Rtree::maxDistance(Point point, double distance) {
@@ -200,13 +231,13 @@ Neighborhood* Rtree::search(Point point, RNode* node) {
     return nullptr;
 }
 
-vector<Neighborhood*> Rtree::range_search(Rectangle window_query) {
+vector<Neighborhood*> Rtree::range_search(Rectangle& window_query) {
     vector<Neighborhood*> result;
-    this->range_search(window_query, this->root, result);
+    this->range_search_helper(window_query, this->root, result);
     return result;
 }
 
-void Rtree::range_search(Rectangle window_query, RNode* node, vector<Neighborhood*>& result) {
+void Rtree::range_search_helper(Rectangle& window_query, RNode* node, vector<Neighborhood*>& result) {
     if (node->isLeaf()) {
         for (Neighborhood* neighborhood : node->getNeighborhoods()) {
             if (window_query.contains(neighborhood->getMBR())) {
@@ -215,6 +246,9 @@ void Rtree::range_search(Rectangle window_query, RNode* node, vector<Neighborhoo
         }
     } else {
         for (RNode* child : node->getChildren()) {
+            if (window_query.intersects(child->getMBR())) {
+                return range_search_helper(window_query, child, result);
+            }
         }
     }
 }

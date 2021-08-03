@@ -26,7 +26,11 @@ public:
     }
 
     bool intersects(Rectangle rectangle) const {
-        if (_max.getLongitud() < rectangle._min.getLongitud() || rectangle._)
+        if (_max.getLongitud() < rectangle._min.getLongitud() || _min.getLongitud() > rectangle._max.getLongitud())
+            return false;
+        if (_max.getLatitude() < rectangle._min.getLatitude() || _min.getLatitude() > rectangle._max.getLatitude())
+            return false;
+        return true;
     }
 
 };
